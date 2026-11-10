@@ -1,0 +1,8 @@
+{
+  "name": "gallopwire",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GallopWire: a playable cyber-western baritone twang for your MIDI keys. Gallop engine over neon whistle, mouth harp, desert bass and hoof-clop kit on YOUR BPM/key/chords. DAW-grid WAV + MIDI export.",
+  "scripts": { "build": "rm -rf dist && mkdir -p dist && cp index.html app.js styles.css dist/" },
+  "license": "UNLICENSED"
+}

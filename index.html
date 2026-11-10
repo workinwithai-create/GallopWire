@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GallopWire · a cyber-western baritone twang for your MIDI keys</title>
+<meta name="description" content="A playable cyber-western instrument: hold chords on your MIDI keyboard and a gallop engine rides them on a synth baritone twang with surf tremolo, neon bit-crush and slap echo, over a neon whistle, mouth harp, desert bass and hoof-clop kit, on YOUR BPM/key/chords. Exports DAW-ready 48k/24 WAV + MIDI.">
+<link rel="stylesheet" href="styles.css"></head>
+<body>
+<div id="tap" class="tap"><div class="tapbox"><h1>GALLOP<span>WIRE</span></h1><p>Hold chords on your MIDI keyboard. A gallop engine rides them on a neon-crushed baritone twang: spaghetti western through a broken screen.</p><button id="tapBtn">Tap to start audio</button><p class="small">On iPhone/iPad, turn off the silent switch: it mutes Web Audio.</p></div></div>
+<header><h1>GALLOP<span>WIRE</span></h1><p class="tag">A playable cyber-western instrument for your MIDI keys. Hold a chord and the gallop engine rides it on a synth baritone twang (gallop stabs, octave twangs, tremolo picking, surf tremolo, neon bit-crush, slap echo) over a neon whistle, a mouth harp, desert bass and a hoof-clop kit, on the grid of <b>your</b> BPM and key.</p>
+<div id="status" class="status">Tap to start audio.</div></header>
+<main>
+<section class="card song"><h2>1 · Your loop</h2>
+ <div class="row"><label>BPM <input id="bpm" type="number" min="60" max="180" step="1"></label>
+ <label>Key <select id="key"></select></label><label>Mode <select id="mode"><option value="major">major</option><option value="minor">minor</option></select></label>
+ <label>Bars <select id="bars"><option>4</option><option>8</option><option>16</option></select></label>
+ <label class="grow">Chords (one per bar, looped) <input id="chords" placeholder="Em C D B7"></label></div>
+ <div id="chordErr" class="err"></div>
+ <p class="small">Your BPM, key and chords are saved in this browser and used for playback and export. Changing the key transposes the chords and your take. The gallop lives on 16 sixteenths per 4/4 bar, so exports sit on a plain DAW grid.</p>
+</section>
+<section class="card play"><h2>2 · Play</h2>
+ <div class="row"><button id="play" class="big">▶ Play gallop + band</button><button id="rec" class="rec">● Rec take</button><button id="clear">Clear take</button>
+ <label class="chk"><input id="quant" type="checkbox"> Snap take to 16ths</label><span id="pos" class="pos">bar – · beat –</span></div>
+ <div id="steps" class="steps"></div>
+ <p id="takeInfo" class="small"></p>
+ <div id="keys" class="keys"></div>
+ <p class="small">Your MIDI keyboard plays the keys voice right away and never starts the transport. Stopped, you hear the raw twang so you can audition voicings. Playing, the gallop engine rides whatever you hold (or your take, or the chord of the bar). Fallback keys: A W S E D F T G Y H U J K O L P ; (Z / X = octave).</p>
+</section>
+<section class="card gate"><h2>3 · Gallop engine</h2>
+ <div class="row"><label>Recipe <select id="recipe"></select></label>
+ <label>Ring <input id="ring" type="range" min="0.5" max="16" step="0.1"><span id="ring_v"></span></label>
+ <label>Strum spread <input id="spread" type="range" min="0" max="0.12" step="0.001"><span id="spread_v"></span></label>
+ <label>Surf tremolo <input id="trem" type="range" min="0" max="1" step="0.01"><span id="trem_v"></span></label>
+ <label>Neon crush <input id="crush" type="range" min="0" max="1" step="0.01"><span id="crush_v"></span></label>
+ <label>Whistle <input id="whistle" type="range" min="0" max="1" step="0.01"><span id="whistle_v"></span></label>
+ <label>Drums <select id="drums"></select></label></div>
+ <div id="grid" class="grid"></div><p id="recipeNote" class="small"></p>
+ <p class="small">16 sixteenth steps per bar. Codes: <b>R</b> low root twang · <b>G</b> gallop stab (muted chord) · <b>O</b> octave twang · <b>T</b> tremolo-picked top note · <b>S</b> strummed chord · <b>H</b> hold · <b>-</b> rest. Click a step to cycle.</p>
+</section>
+<section class="card voice"><h2>4 · Voice + mix</h2>
+ <div class="row"><label>Voice <select id="voice"></select></label>
+ <label>Brightness <input id="bright" type="range" min="0" max="1" step="0.005"><span id="bright_v"></span></label>
+ <label>Attack <input id="atk" type="range" min="0.002" max="1.5" step="0.001"><span id="atk_v"></span></label>
+ <label>Release <input id="rel" type="range" min="0.01" max="2.5" step="0.01"><span id="rel_v"></span></label>
+ <label class="chk"><input id="lock" type="checkbox"> Scale lock (snap keys to your key)</label></div>
+ <p id="voiceNote" class="small"></p>
+ <h3>Mix</h3><div id="mix" class="mix"></div>
+</section>
+<section class="card io"><h2>5 · MIDI + audio</h2>
+ <div class="row"><label>MIDI in <select id="midiIn"></select></label><label>MIDI out <select id="midiOut"></select></label>
+ <label>Audio out <select id="audioOut"></select></label></div>
+ <p id="midiNote" class="small"></p><p id="audioOutNote" class="small"></p><p id="midiLast" class="small mono"></p>
+ <p class="small">Controls: notes + velocity · CC64 sustain · CC1 mod wheel = surf tremolo depth · CC74 = brightness · CC71 = neon crush · CC11 expression / CC2 breath = whistle level · pitch bend ±2 (whammy) · CC123 all notes off. MIDI out mirrors what you play and the gallop engine (ch 1), bass (ch 3), mouth harp (ch 4) and kit (ch 10). No audio input is used.</p>
+</section>
+<section class="card exp"><h2>6 · Export (drops on bar 1 of your DAW)</h2>
+ <div class="row"><button id="wav">Export WAV</button><button id="mid">Export MIDI</button></div>
+ <progress id="expProg" hidden max="1" value="0"></progress><p id="expMsg" class="expmsg"></p>
+ <p class="small">48 kHz / 24-bit stereo, exactly your bars at your BPM, downbeat at sample 0, twang ring-out, slap echo and canyon tail folded into the start so it loops, peak ≤ −1 dBFS. MIDI: tempo, 4/4, key, one track per chair (Baritone Twang, Neon Whistle, Mouth Harp, Desert Bass, Gallop Kit).</p>
+ <div class="lic"><button id="buy" disabled>Checkout opening soon</button><input id="licKey" placeholder="License key"><button id="licBtn">Unlock</button><p id="licState" class="small"></p></div>
+</section>
+<p class="foot">Every sound in GallopWire is synthesized in your browser and named as a synth. No samples, no accounts, no tracking. © 2026 WorkinWithAI.</p>
+</main>
+<script src="app.js"></script>
+</body></html>
